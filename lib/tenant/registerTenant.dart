@@ -9,8 +9,8 @@ class registerTenant extends StatefulWidget {
 }
 
 class _registerTenantState extends State<registerTenant> {
-  Tenant _tenant = Tenant();
-  List<Tenant> _tenants = [];
+  Tenant _tenant = Tenant(); //instance of tenant class
+
   final _formkey = GlobalKey<FormState>();
 
   Widget form() => Container(
@@ -95,26 +95,17 @@ class _registerTenantState extends State<registerTenant> {
         ),
       );
 
-  Widget _onSubmit() {
+  _onSubmit() {
     var form = _formkey.currentState;
 
     if (form.validate()) {
       form.save();
-      setState(() {
-        // form._contact(_contacts);
-        var tent = _tenants.add(Tenant(
-            id: null,
-            name: _tenant.name,
-            email: _tenant.email,
-            username: _tenant.username,
-            mobile: _tenant.mobile,
-            password: _tenant.password));
-      });
-      // print(_tenant.name);
-      // print(_tenant.email);
-      // print(_tenant.mobile);
-      // print(_tenant.username);
-      // print(_tenant.password);
+
+      print(_tenant.name);
+      print(_tenant.email);
+      print(_tenant.mobile);
+      print(_tenant.username);
+      print(_tenant.password);
 
       form.reset();
     }

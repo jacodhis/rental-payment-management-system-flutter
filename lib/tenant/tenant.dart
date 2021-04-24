@@ -1,25 +1,46 @@
-class Tenant {
-  static const tableContact = 'tenants';
-  static const colId = 'id';
-  static const colName = 'name';
-  static const colMobile = 'mobile';
+// To parse this JSON data, do
+//
+//     final tenantsModel = tenantsModelFromJson(jsonString);
 
-  int id;
+import 'dart:convert';
+
+TenantsModel tenantsModelFromJson(String str) =>
+    TenantsModel.fromJson(json.decode(str));
+
+String tenantsModelToJson(TenantsModel data) => json.encode(data.toJson());
+
+class TenantsModel {
+  TenantsModel({
+    this.id,
+    this.name,
+    this.email,
+    this.username,
+    this.mobile,
+    this.password,
+  });
+
+  String id;
   String name;
+  String email;
+  String username;
   String mobile;
-  Tenant({this.id, this.name, this.mobile});
-// retrieving
-  Tenant.fromMap(Map<String, dynamic> map) {
-    id = map[colId];
-    name = map[colName];
-    mobile = map[colMobile];
-  }
-// sending
-  Map<String, dynamic> toMap() {
-    var map = <String, dynamic>{colName: name, colMobile: mobile};
-    if (id != null) {
-      map[colId] = id;
-      return map;
-    }
-  }
+  String password;
+
+  factory TenantsModel.fromJson(Map<String, dynamic> json) => TenantsModel(
+        id: json["id"],
+        name: json["name"],
+        email: json["email"],
+        username: json["username"],
+        mobile: json["mobile"],
+        password: json["password"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "email": email,
+        "username": username,
+        "mobile": mobile,
+        "password": password,
+      };
 }

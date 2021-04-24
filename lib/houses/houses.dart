@@ -110,7 +110,7 @@ Widget housesWidget() {
           return CircularProgressIndicator();
           // return Text("${snapshot.error}");
         }
-        // return CircularProgressIndicator();
+        return CircularProgressIndicator();
       },
     ),
   );
