@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tim_example/navbar-drawer.dart';
 
 class viewHouse extends StatelessWidget {
   String house;
@@ -10,6 +11,7 @@ class viewHouse extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: NavDrawer(),
       appBar: AppBar(
         centerTitle: true,
         title: Text('Gatata Plot Rentals App'),

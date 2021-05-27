@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
-import 'house.dart';
-import 'housesApi.dart';
-import 'viewHouse.dart';
 
-class houses extends StatelessWidget {
+import 'housesApi.dart';
+
+import 'package:tim_example/models/houseModelApi.dart';
+import 'package:tim_example/navbar-drawer.dart';
+
+class houses extends StatefulWidget {
+  @override
+  _housesState createState() => _housesState();
+}
+
+class _housesState extends State<houses> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.green[200],
+      drawer: NavDrawer(),
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Gatata Plot Rentals App'),
+        title: Text('Gatata Houses'),
       ),
       body: housesWidget(),
     );
@@ -22,96 +31,55 @@ Widget housesWidget() {
       future: getHouse(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return ListView.builder(
-            itemCount: snapshot.data.length,
-            shrinkWrap: true,
-            itemBuilder: (BuildContext context, index) {
-              HousesModel house = snapshot.data[index];
-
-              return Card(
-                margin: EdgeInsets.fromLTRB(20.0, 30, 20.0, 0.0),
-                color: Colors.orange,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // Container(
-                    //   child: Text(
-                    //     house.houseNumber,
-                    //     style: TextStyle(
-                    //       color: Colors.black,
-                    //     ),
-                    //   ),
-                    // ),
-                    // Container(
-                    //   child: RaisedButton(
-                    //     color: Colors.blue,
-                    //     child: Text(
-                    //       house.househousePrice,
-                    //       style: TextStyle(
-                    //         color: Colors.white,
-                    //       ),
-                    //     ),
-                    //     onPressed: () {
-                    //       print('${house.id}');
-                    //     },
-                    //   ),
-                    // ),
-
-                    ListTile(
-                      leading: Icon(
-                        Icons.account_circle,
-                        color: Colors.blue,
-                        size: 40.0,
-                      ),
-                      title: RaisedButton(
-                        onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => viewHouse(
-                              // house: house.id,
-                              houseNumber: house.houseNumber,
-                              housePrice: house.housePrice,
-                            ),
-                          ));
-                        },
-                        child: Text(
-                          house.houseNumber,
-                          style: TextStyle(
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                      subtitle: Text(
-                        'Rent : ' + house.housePrice + 'kshs',
-                        // '${house.housePrice}',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                      trailing: Icon(Icons.arrow_forward),
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => viewHouse(
-                            // house: house.id,
-                            houseNumber: house.houseNumber,
-                            housePrice: house.housePrice,
-                          ),
-                        ));
-
-                        // Navigator.pushNamed(context, '/viewHouse/' house.id);
-                      },
-                    ),
-                  ],
+          return Column(
+            children: [
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.all(5),
+                  child: databody(snapshot.data),
                 ),
-              );
-            },
+              ),
+            ],
           );
           // return Text(snapshot.data.houseNumber);
         } else if (snapshot.hasError) {
-          return CircularProgressIndicator();
-          // return Text("${snapshot.error}");
+          return Center(
+            child: CircularProgressIndicator(),
+          );
         }
         return CircularProgressIndicator();
       },
     ),
   );
+}
+
+databody(List<HousesModel> getHouse) {
+  return DataTable(
+    columns: [
+      DataColumn(label: Text('Id')),
+      DataColumn(label: Text('house  Number')),
+      DataColumn(label: Text('house Price')),
+    ],
+    rows:
+        getHouse // Loops through dataColumnText, each iteration assigning the value to element
+            .map(
+              ((element) => DataRow(
+                    cells: <DataCell>[
+                      DataCell(Text(element.id.toString())),
+                      DataCell(Text(element
+                          .houseNumber)), //Extracting from Map element the value
+                      DataCell(Text(element.houseNumber)),
+                    ],
+                  )),
+            )
+            .toList(),
+  );
+
+  // return Container(
+  //   child: Column(
+  //     children: [
+  //       for (var item in getHouse) Text(item.housePrice.toString()),
+  //     ],
+  //   ),
+  // );
 }

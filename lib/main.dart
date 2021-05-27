@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:tim_example/tenant/registerTenant.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'backGroundImage.dart';
-import 'bodytitle.dart';
-// import 'houses.dart';
-import 'Login.dart';
+// import 'bodytitle.dart';
 import 'routeNavigation.dart';
+import 'navbar-drawer.dart';
 
-// import './imports/importsFile.dart';
 void main() {
   runApp(MyApp());
 }
@@ -22,37 +20,68 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       debugShowCheckedModeBanner: false,
-      // home: myHomePage(),
       initialRoute: '/homeView',
       routes: routeNavigation,
     );
   }
 }
 
-class myHomePage extends StatelessWidget {
+class myHomePage extends StatefulWidget {
+  @override
+  _myHomePageState createState() => _myHomePageState();
+}
+
+class _myHomePageState extends State<myHomePage> {
+  @override
+  void initState() {
+    super.initState();
+    getEmail();
+  }
+
+  String finalEmail = "";
+
+  Future getEmail() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    setState(() {
+      var obtainedEmail =
+          pref.getString('email') ?? 'Login to Access the site  ';
+      finalEmail = obtainedEmail;
+      print(finalEmail);
+    });
+  }
+
+  logout() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    setState(() {
+      pref.remove('email');
+    });
+    Navigator.pushNamed(context, '/homeView');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // backgroundColor: Colors.,
+      drawer: NavDrawer(),
       appBar: AppBar(
+        backgroundColor: Colors.green,
         centerTitle: true,
         title: Text('Gatata Plot Rentals App'),
       ),
       body: Column(
         children: [
-          bodytitle(),
+          Text('hi  ' + finalEmail),
+          // bodytitle(),
           startimage('images/gatata.jpg'),
-          // houses(),
           Column(
-            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
-                margin: EdgeInsets.fromLTRB(20.0, 30, 20.0, 0.0),
+                margin: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
                 child: RaisedButton(
                   color: Colors.orange,
                   child: Text(
-                    'Login',
-                    style: TextStyle(color: Colors.white),
+                    'login',
                   ),
                   onPressed: () {
                     Navigator.pushNamed(context, '/loginView');
@@ -64,16 +93,13 @@ class myHomePage extends StatelessWidget {
                 child: RaisedButton(
                   color: Colors.orange,
                   child: Text(
-                    'Register Tenant',
-                    style: TextStyle(color: Colors.white),
+                    'logOut',
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, '/registerTenantView');
+                    logout();
                   },
                 ),
               ),
-
-              // child: login(),
             ],
           ),
         ],

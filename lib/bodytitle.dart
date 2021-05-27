@@ -10,32 +10,20 @@ class bodytitle extends StatelessWidget {
       children: [
         Container(
           padding: EdgeInsets.fromLTRB(_hpad, 20.0, _hpad, 4.0),
-          child: Row(
-            children: [
-              Container(
-                child: Text(
-                  'Rental Payment System',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16.0,
-                  ),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: RaisedButton(
-                  color: Colors.blue,
-                  child: Text(
-                    ' Houses',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/housesView');
-                  },
-                ),
-              ),
-            ],
-          ),
+          // child: Row(
+          //   children: [
+          //     Container(
+          //       child: Text(
+          //         'Rental Payment System',
+          //         style: TextStyle(
+          //           color: Colors.black,
+          //           fontSize: 16.0,
+          //         ),
+          //       ),
+          //     ),
+
+          //   ],
+          // ),
         ),
       ],
     );
