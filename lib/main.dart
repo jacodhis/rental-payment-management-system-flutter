@@ -43,8 +43,7 @@ class _myHomePageState extends State<myHomePage> {
   Future getEmail() async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
     setState(() {
-      var obtainedEmail =
-          pref.getString('email') ?? 'Login to Access the site  ';
+      var obtainedEmail = pref.getString('email') ?? '';
       finalEmail = obtainedEmail;
       print(finalEmail);
     });
@@ -70,7 +69,18 @@ class _myHomePageState extends State<myHomePage> {
       ),
       body: Column(
         children: [
-          Text('hi  ' + finalEmail),
+          Center(
+            child: finalEmail.isEmpty
+                ? Text('')
+                : Center(
+                    child: MaterialButton(
+                    child: Text(
+                      'Welcome  ' + finalEmail,
+                      style:
+                          TextStyle(color: Colors.orange[600], fontSize: 25.0),
+                    ),
+                  )),
+          ),
           // bodytitle(),
           startimage('images/gatata.jpg'),
           Column(
@@ -78,15 +88,23 @@ class _myHomePageState extends State<myHomePage> {
             children: [
               Container(
                 margin: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
-                child: RaisedButton(
-                  color: Colors.orange,
-                  child: Text(
-                    'login',
-                  ),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/loginView');
-                  },
-                ),
+                child: finalEmail.isEmpty
+                    ? RaisedButton(
+                        child: Text('Login'),
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/loginView');
+                        },
+                      )
+                    : RaisedButton(
+                        child: Text('welcome  ' + finalEmail),
+                        onPressed: () {}),
+                // RaisedButton(
+                //   color: Colors.orange,
+                //   child: finalEmail.isEmpty ? Text('Login') : Text(finalEmail),
+                //   onPressed: () {
+                //     Navigator.pushNamed(context, '/loginView');
+                //   },
+                // ),
               ),
               Container(
                 margin: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),

@@ -1,9 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.tim_example">
-    <uses-permission android:name="android.permission.INTERNET" />
+    package="com.example.flutter_application_1">
    <application
-        android:label="tim_example"
-        android:usesCleartextTraffic="true"
+        android:label="flutter_application_1"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
@@ -39,6 +37,5 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-            
     </application>
 </manifest>

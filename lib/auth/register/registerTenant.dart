@@ -30,7 +30,7 @@ class _registerTenantState extends State<registerTenant> {
                       color: Colors.black,
                     ),
                     decoration: InputDecoration(
-                      labelText: 'First Name',
+                      labelText: 'Name',
                       icon: const Padding(
                         padding: const EdgeInsets.only(top: 15.0),
                         child: const Icon(Icons.person),
@@ -144,7 +144,7 @@ class _registerTenantState extends State<registerTenant> {
     // var name = "${data['name']}";
     // print(name);
 
-    print("DATA: ${data}");
+    // print("DATA: ${data}");
   }
 
   @override

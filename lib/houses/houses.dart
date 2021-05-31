@@ -4,6 +4,7 @@ import 'housesApi.dart';
 
 import 'package:tim_example/models/houseModelApi.dart';
 import 'package:tim_example/navbar-drawer.dart';
+import 'package:http/http.dart' as http;
 
 class houses extends StatefulWidget {
   @override
@@ -56,7 +57,8 @@ Widget housesWidget() {
 databody(List<HousesModel> getHouse) {
   return DataTable(
     columns: [
-      DataColumn(label: Text('Id')),
+      DataColumn(label: Text('Tenant')),
+      // DataColumn(label: Text('Id')),
       DataColumn(label: Text('house  Number')),
       DataColumn(label: Text('house Price')),
     ],
@@ -65,7 +67,12 @@ databody(List<HousesModel> getHouse) {
             .map(
               ((element) => DataRow(
                     cells: <DataCell>[
-                      DataCell(Text(element.id.toString())),
+                      DataCell(
+                        // UserName(element.user_id),
+                        Text(element.user.name),
+                      ),
+
+                      // DataCell(Text(element.id.toString())),
                       DataCell(Text(element
                           .houseNumber)), //Extracting from Map element the value
                       DataCell(Text(element.houseNumber)),

@@ -1,5 +1,5 @@
 // import 'houseModelApi.dart';
-import 'package:flutter/cupertino.dart';
+// import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'package:tim_example/models/houseModelApi.dart';
@@ -11,7 +11,7 @@ Future<List<HousesModel>> getHouse() async {
 
   if (response.statusCode == 200) {
     print(response.statusCode);
-    // return housesModelFromJson(response.body);
+    print(response.body);
   } else {
     print('error loading houses');
   }

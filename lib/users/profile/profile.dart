@@ -1,6 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:tim_example/navbar-drawer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'imagefunction.dart';
+import 'package:tim_example/models/UserModel.dart';
 
 class profile extends StatefulWidget {
   @override
@@ -25,11 +30,32 @@ class _profileState extends State<profile> {
     });
   }
 
+  // upload picture
+  String _image;
+  String localImage;
+  upload() async {
+    localImage = await pickImage();
+    // setState(() {
+    _image = localImage;
+    // });
+
+    // print(localImage);
+  }
+
   UserProfile() {
     if (finalEmail == '') {
       return Container(
         child: Center(
-          child: Text('login first'),
+          child: MaterialButton(
+            color: Colors.blue,
+            child: Text(
+              'login Here First',
+              style: TextStyle(fontSize: 20.0, color: Colors.white),
+            ),
+            onPressed: () => {
+              Navigator.pushNamed(context, '/loginView'),
+            },
+          ),
         ),
       );
     } else {
@@ -38,111 +64,169 @@ class _profileState extends State<profile> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(
-              child: CircleAvatar(
-                backgroundImage: AssetImage('images/ninja.jpg'),
-                radius: 40.0,
-              ),
+            Container(
+              child: profile(),
             ),
-            Divider(
-              height: 60.0,
-              color: Colors.white,
-            ),
-            Expanded(
-              child: Column(
-                children: [
-                  name(),
-                  SizedBox(
-                    //adding a space between 2 different widgets
-                    height: 10.0,
-                  ),
-                  email(),
-                  SizedBox(
-                    //adding a space between 2 different widgets
-                    height: 10.0,
-                  ),
-                  house(),
-                ],
-              ),
-            ),
+            // profile(),
           ],
         ),
       );
     }
   }
 
-  name() {
-    return Column(
-      children: [
-        Container(
-          child: Text(
-            'name',
-            style: TextStyle(
-              color: Colors.black,
-              letterSpacing: 2.0,
-            ),
-          ),
-        ),
-        SizedBox(
-          //adding a space between 2 different widgets
-          height: 10.0,
-        ),
-        Container(
-          child: Text(
-            'jack odhiambo',
-            style: TextStyle(
-                color: Colors.black,
-                letterSpacing: 2.0,
-                fontSize: 25.0,
-                fontWeight: FontWeight.bold),
-          ),
-        ),
-      ],
-    );
-  }
-
-  email() {
+  Widget profile() {
     return Container(
-      child: Column(
-        children: [
-          Container(
-            child: Text(
-              'Email',
-              style: TextStyle(
-                color: Colors.black,
-                letterSpacing: 2.0,
-              ),
-            ),
-          ),
-          SizedBox(
-            //adding a space between 2 different widgets
-            height: 10.0,
-          ),
-          Container(
-            child: Text(
-              'odhiambojack536@gmail.com',
-              style: TextStyle(
-                  color: Colors.black,
-                  letterSpacing: 2.0,
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold),
-            ),
-          ),
-        ],
+      child: FutureBuilder(
+        future: getUser(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return ListView.builder(
+                itemCount: snapshot.data.length,
+                shrinkWrap: true,
+                itemBuilder: (BuildContext context, index) {
+                  UserModel user = snapshot.data[index];
+
+                  return Padding(
+                    padding: EdgeInsets.fromLTRB(30.0, 40.0, 30.0, 0.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Center(
+                          child: CircleAvatar(
+                            radius: 50.0,
+                            child: Text(user.name),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        Center(
+                          child: Container(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Container(
+                                  child: MaterialButton(
+                                      color: Colors.blue,
+                                      child: Text(
+                                        'upload Image',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                      onPressed: () {
+                                        upload();
+                                      }),
+                                ),
+                                Container(
+                                  child: MaterialButton(
+                                    color: Colors.red,
+                                    onPressed: () {},
+                                    child: Text(
+                                      'Edit information ',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Divider(
+                          height: 60.0,
+                          color: Colors.black,
+                        ),
+                        Text(
+                          'NAME',
+                          style: TextStyle(
+                            color: Colors.grey,
+                            letterSpacing: 2.0,
+                          ),
+                        ),
+                        SizedBox(
+                          //adding a space between 2 different widgets
+                          height: 10.0,
+                        ),
+                        Text(
+                          user.name,
+                          style: TextStyle(
+                              color: Colors.amberAccent[200],
+                              letterSpacing: 2.0,
+                              fontSize: 25.0,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        Text(
+                          'EMAIL',
+                          style: TextStyle(
+                            color: Colors.grey,
+                            letterSpacing: 2.0,
+                          ),
+                        ),
+                        SizedBox(
+                          //adding a space between 2 different widgets
+                          height: 10.0,
+                        ),
+                        Text(
+                          user.email,
+                          style: TextStyle(
+                              color: Colors.amberAccent[200],
+                              letterSpacing: 2.0,
+                              fontSize: 25.0,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Container(
+                          margin: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+                          child: RaisedButton(
+                            color: Colors.blue,
+                            child: Text(
+                              'view Payments',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/payments');
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                });
+            // return snapshot.data;
+          } else if (snapshot.hasError) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return CircularProgressIndicator();
+        },
       ),
     );
   }
 
-  house() {
-    return Row(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Text('house number'),
-        ),
-        Text('house Price'),
-      ],
+  Future<List<UserModel>> getUser() async {
+    // print('hello user');
+    var R_Url = Uri.parse("http://10.0.2.2:8000/users/email");
+
+    Map mappedUserEmail = {
+      'email': finalEmail,
+    };
+
+    http.Response response = await http.post(
+      R_Url,
+      body: mappedUserEmail,
     );
+
+    if (response.statusCode == 200) {
+      // print(response.body);
+      // var data = jsonDecode(response.body);
+      // print(data);
+      return userModelFromJson(response.body);
+    } else {
+      print(response.statusCode);
+    }
   }
 
   @override
@@ -155,10 +239,6 @@ class _profileState extends State<profile> {
         title: Text('Your Profile'),
       ),
       body: UserProfile(),
-      floatingActionButton: FloatingActionButton(
-        child: Text('edit user'),
-        onPressed: () {},
-      ),
     );
   }
 }

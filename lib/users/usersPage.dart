@@ -31,7 +31,16 @@ class _UsersPageState extends State<UsersPage> {
     if (finalEmail == '') {
       return Container(
         child: Center(
-          child: Text('login first'),
+          child: MaterialButton(
+            color: Colors.blue,
+            child: Text(
+              'login Here First',
+              style: TextStyle(fontSize: 20.0, color: Colors.white),
+            ),
+            onPressed: () => {
+              Navigator.pushNamed(context, '/loginView'),
+            },
+          ),
         ),
       );
     } else {
@@ -53,10 +62,34 @@ class _UsersPageState extends State<UsersPage> {
     }
   }
 
+  users(List<UserModel> getUsers) {
+    return DataTable(
+      columns: [
+        DataColumn(label: Text('Person')),
+        DataColumn(label: Text('Name')),
+        DataColumn(label: Text('Email')),
+      ],
+      rows:
+          getUsers // Loops through dataColumnText, each iteration assigning the value to element
+              .map(
+                ((element) => DataRow(
+                      cells: <DataCell>[
+                        DataCell(Icon(Icons.account_circle)),
+                        DataCell(
+                          Text(element.name),
+                        ),
+                        DataCell(Text(element.email)),
+                      ],
+                    )),
+              )
+              .toList(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green[200],
+      backgroundColor: Colors.white,
       drawer: NavDrawer(),
       appBar: AppBar(
         centerTitle: true,
@@ -65,28 +98,4 @@ class _UsersPageState extends State<UsersPage> {
       body: Users(),
     );
   }
-}
-
-users(List<UserModel> getUsers) {
-  return DataTable(
-    columns: [
-      DataColumn(label: Text('Person')),
-      DataColumn(label: Text('Name')),
-      DataColumn(label: Text('Email')),
-    ],
-    rows:
-        getUsers // Loops through dataColumnText, each iteration assigning the value to element
-            .map(
-              ((element) => DataRow(
-                    cells: <DataCell>[
-                      DataCell(Icon(Icons.account_circle)),
-                      DataCell(
-                        Text(element.name),
-                      ),
-                      DataCell(Text(element.email)),
-                    ],
-                  )),
-            )
-            .toList(),
-  );
 }

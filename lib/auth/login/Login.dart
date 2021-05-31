@@ -108,10 +108,18 @@ class _loginState extends State<login> {
         String error = 'user not found';
         print(error);
       } else {
+        // var name = data[0]['name'];
+        // var email = data[0]['email'];
+
+        // List<String> details = [name, email];
+        // print(details);
+        // SharedPreferences pref = await SharedPreferences.getInstance();
+        // pref.setStringList('details', details);
+
         SharedPreferences pref = await SharedPreferences.getInstance();
         pref.setString('email', email);
 
-        Navigator.pushNamed(context, '/selectMenu');
+        Navigator.pushNamed(context, '/profile');
 
         // print(data);
       }
@@ -119,6 +127,7 @@ class _loginState extends State<login> {
       // Navigator.pushNamed(context, '/welcomePage');
     } else {
       print(response.statusCode);
+      // print('not logged in');
     }
 
     // var name = "${data['name']}";

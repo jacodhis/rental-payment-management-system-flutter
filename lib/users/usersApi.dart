@@ -2,7 +2,7 @@ import 'package:tim_example/models/UserModel.dart';
 
 import 'package:http/http.dart' as http;
 import 'dart:async';
-import 'dart:convert';
+// import 'dart:convert';
 
 Future<List<UserModel>> getUsers() async {
   var url = Uri.parse('http://10.0.2.2:8000/users');
@@ -10,7 +10,8 @@ Future<List<UserModel>> getUsers() async {
   http.Response response = await http.get(url);
 
   if (response.statusCode == 200) {
-    print(response.statusCode);
+    // print(response.statusCode);
+    print(response.body);
   } else {
     print('404');
   }
