@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:tim_example/navbar-drawer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'imagefunction.dart';
 import 'package:tim_example/models/UserModel.dart';
+import 'dart:io';
+// import 'dart:convert';
+import 'package:image_picker/image_picker.dart';
 
 class profile extends StatefulWidget {
   @override
@@ -31,15 +33,52 @@ class _profileState extends State<profile> {
   }
 
   // upload picture
-  String _image;
-  String localImage;
-  upload() async {
-    localImage = await pickImage();
-    // setState(() {
-    _image = localImage;
-    // });
 
-    // print(localImage);
+  File _image;
+  final picker = ImagePicker();
+  String base64;
+
+  Future upload(id) async {
+    var pickedImage = await picker.getImage(source: ImageSource.gallery);
+
+    setState(() {
+      _image = File(pickedImage.path);
+      // print(id);
+      send(_image, id);
+    });
+  }
+
+  send(image, id) async {
+    var R_Url = Uri.parse("http://10.0.2.2:8000/users/imageUpload");
+
+    // var request = http.MultipartRequest('POST', R_Url);
+    // request.fields['id'] = id;
+    // var pic = await http.MultipartFile.fromPath('image', _image.path);
+    // request.files.add(pic);
+
+    // var response = await request.send();
+
+    // if (response.statusCode == 200) {
+    //   print(response.statusCode);
+    // } else {
+    //   print('not sent');
+    // }
+
+    base64 = base64Encode(image.readAsBytesSync());
+    String fileName = image.path.split('/').last;
+    print(id);
+
+    http.Response response = await http.post(
+      R_Url,
+      body: {
+        "id": id,
+        "name": fileName,
+        "image": base64,
+      },
+      // headers: {'Content-Type': 'application/json', 'Charset': 'utf-8'}
+    );
+    var data = jsonDecode(response.body);
+    print(data);
   }
 
   UserProfile() {
@@ -93,8 +132,10 @@ class _profileState extends State<profile> {
                       children: [
                         Center(
                           child: CircleAvatar(
-                            radius: 50.0,
-                            child: Text(user.name),
+                            radius: 100.0,
+                            child: _image == null
+                                ? Text('no image')
+                                : Image.file(_image),
                           ),
                         ),
                         SizedBox(
@@ -113,7 +154,7 @@ class _profileState extends State<profile> {
                                         style: TextStyle(color: Colors.white),
                                       ),
                                       onPressed: () {
-                                        upload();
+                                        upload(user.id.toString());
                                       }),
                                 ),
                                 Container(
@@ -148,7 +189,7 @@ class _profileState extends State<profile> {
                         Text(
                           user.name,
                           style: TextStyle(
-                              color: Colors.amberAccent[200],
+                              color: Colors.black,
                               letterSpacing: 2.0,
                               fontSize: 25.0,
                               fontWeight: FontWeight.bold),
@@ -170,7 +211,7 @@ class _profileState extends State<profile> {
                         Text(
                           user.email,
                           style: TextStyle(
-                              color: Colors.amberAccent[200],
+                              color: Colors.black,
                               letterSpacing: 2.0,
                               fontSize: 25.0,
                               fontWeight: FontWeight.bold),
@@ -220,7 +261,7 @@ class _profileState extends State<profile> {
     );
 
     if (response.statusCode == 200) {
-      // print(response.body);
+      print(response.body);
       // var data = jsonDecode(response.body);
       // print(data);
       return userModelFromJson(response.body);

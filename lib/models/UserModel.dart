@@ -16,6 +16,8 @@ class UserModel {
     this.id,
     this.name,
     this.email,
+    this.image,
+    this.phone,
     this.emailVerifiedAt,
     this.password,
     this.createdAt,
@@ -25,6 +27,8 @@ class UserModel {
   int id;
   String name;
   String email;
+  String image;
+  String phone;
   dynamic emailVerifiedAt;
   String password;
   DateTime createdAt;
@@ -34,6 +38,8 @@ class UserModel {
         id: json["id"],
         name: json["name"],
         email: json["email"],
+        image: json["image"],
+        phone: json["phone"],
         emailVerifiedAt: json["email_verified_at"],
         password: json["password"],
         createdAt: DateTime.parse(json["created_at"]),
@@ -44,6 +50,8 @@ class UserModel {
         "id": id,
         "name": name,
         "email": email,
+        "image": image,
+        "phone": phone,
         "email_verified_at": emailVerifiedAt,
         "password": password,
         "created_at": createdAt.toIso8601String(),

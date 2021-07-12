@@ -22,7 +22,7 @@ class _loginState extends State<login> {
           child: Form(
             key: _formkey,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+              // mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
                   child: TextFormField(

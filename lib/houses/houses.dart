@@ -32,7 +32,7 @@ Widget housesWidget() {
       future: getHouse(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return Column(
+          return ListView(
             children: [
               Expanded(
                 child: Container(
@@ -55,31 +55,34 @@ Widget housesWidget() {
 }
 
 databody(List<HousesModel> getHouse) {
-  return DataTable(
-    columns: [
-      DataColumn(label: Text('Tenant')),
-      // DataColumn(label: Text('Id')),
-      DataColumn(label: Text('house  Number')),
-      DataColumn(label: Text('house Price')),
-    ],
-    rows:
-        getHouse // Loops through dataColumnText, each iteration assigning the value to element
-            .map(
-              ((element) => DataRow(
-                    cells: <DataCell>[
-                      DataCell(
-                        // UserName(element.user_id),
-                        Text(element.user.name),
-                      ),
+  return Container(
+    width: 250.0,
+    child: DataTable(
+      columns: [
+        DataColumn(label: Text('Tenant')),
+        // DataColumn(label: Text('Id')),
+        DataColumn(label: Text('house  Number')),
+        DataColumn(label: Text('house Price')),
+      ],
+      rows:
+          getHouse // Loops through dataColumnText, each iteration assigning the value to element
+              .map(
+                ((element) => DataRow(
+                      cells: <DataCell>[
+                        DataCell(
+                          // UserName(element.user_id),
+                          Text(element.user.name),
+                        ),
 
-                      // DataCell(Text(element.id.toString())),
-                      DataCell(Text(element
-                          .houseNumber)), //Extracting from Map element the value
-                      DataCell(Text(element.houseNumber)),
-                    ],
-                  )),
-            )
-            .toList(),
+                        // DataCell(Text(element.id.toString())),
+                        DataCell(Text(element
+                            .houseNumber)), //Extracting from Map element the value
+                        DataCell(Text(element.houseNumber)),
+                      ],
+                    )),
+              )
+              .toList(),
+    ),
   );
 
   // return Container(
